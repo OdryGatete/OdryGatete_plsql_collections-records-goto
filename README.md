@@ -18,3 +18,7 @@ Correction results
 
 Record results
 ![Task 2](PL_SQL_SCRIPTS/images/RECORD_results.png)
+
+Goto results
+![Task 2](PL_SQL_SCRIPTS/images/Goto_results.png)
+
