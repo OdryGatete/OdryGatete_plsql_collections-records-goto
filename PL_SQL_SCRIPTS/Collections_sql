@@ -1,1 +1,78 @@
+-- === COLLECTIONS EXAMPLE: associative array, nested table, and VARRAY ===
+DECLARE
+  -- 1) associative array indexed by binary_integer to hold salaries
+  TYPE emp_salary_tab IS TABLE OF employees.salary%TYPE INDEX BY BINARY_INTEGER;
+  v_emp_salaries emp_salary_tab;
+
+  -- 2) nested table type (dynamically resizable)
+  TYPE num_table IS TABLE OF NUMBER;
+  v_dept_salaries num_table := num_table();  -- initialize empty nested table
+
+  -- 3) VARRAY type (fixed max size 5)
+  TYPE salary_varray IS VARRAY(5) OF NUMBER;
+  v_top5_salaries salary_varray := salary_varray(); -- initialize empty varray
+
+  v_index   PLS_INTEGER := 0;
+  v_sum     NUMBER := 0;
+  v_avg     NUMBER := 0;
+BEGIN
+  -- Load salaries of employees in Department_ID = 3 (Information Technology)
+  FOR r IN (SELECT employee_id, salary FROM employees WHERE department_id = 3 ORDER BY employee_id) LOOP
+    v_index := v_index + 1;
+
+    -- Populate associative array (1..n)
+    v_emp_salaries(v_index) := r.salary;
+
+    -- Populate nested table
+    v_dept_salaries.EXTEND;
+    v_dept_salaries(v_dept_salaries.COUNT) := r.salary;
+
+    -- Populate VARRAY up to 5 values
+    IF v_top5_salaries.COUNT < 5 THEN
+      v_top5_salaries.EXTEND;
+      v_top5_salaries(v_top5_salaries.COUNT) := r.salary;
+    END IF;
+  END LOOP;
+
+  -- Show associative array contents and compute average
+  DBMS_OUTPUT.PUT_LINE('--- Associative array (emp salaries) ---');
+  v_sum := 0;
+  FOR i IN 1 .. v_index LOOP
+    DBMS_OUTPUT.PUT_LINE('Index ' || i || ': ' || v_emp_salaries(i));
+    v_sum := v_sum + v_emp_salaries(i);
+  END LOOP;
+  IF v_index > 0 THEN
+    v_avg := v_sum / v_index;
+    DBMS_OUTPUT.PUT_LINE('Average salary (assoc array): ' || TO_CHAR(v_avg));
+  ELSE
+    DBMS_OUTPUT.PUT_LINE('No salaries found for department 3.');
+  END IF;
+
+  -- Show nested table details
+  DBMS_OUTPUT.PUT_LINE('--- Nested table (dept salaries) ---');
+  IF v_dept_salaries.COUNT > 0 THEN
+    FOR j IN 1 .. v_dept_salaries.LAST LOOP
+      IF v_dept_salaries.EXISTS(j) THEN
+        DBMS_OUTPUT.PUT_LINE('Element ' || j || ': ' || v_dept_salaries(j));
+      END IF;
+    END LOOP;
+  ELSE
+    DBMS_OUTPUT.PUT_LINE('Nested table is empty.');
+  END IF;
+
+  -- Show VARRAY contents
+  DBMS_OUTPUT.PUT_LINE('--- VARRAY (top 5 salaries) ---');
+  IF v_top5_salaries.COUNT > 0 THEN
+    FOR k IN 1 .. v_top5_salaries.COUNT LOOP
+      DBMS_OUTPUT.PUT_LINE('VARRAY(' || k || '): ' || v_top5_salaries(k));
+    END LOOP;
+  ELSE
+    DBMS_OUTPUT.PUT_LINE('VARRAY is empty.');
+  END IF;
+
+EXCEPTION
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('Error in Collections block: ' || SQLERRM);
+END;
+/
 
