@@ -14,4 +14,4 @@ Finally, we can use a GOTO statement to skip over employees who don’t qualify 
 This approach not only makes bonus calculation more efficient but also gives a clear example of how Collections, Records, and GOTO statements work together in PL/SQL.
 
 Correction results 
-![Task 2](/image/Task%202%20.png)
+![Task 2](PL_SQL_SCRIPTS/images/collection_img.png)
