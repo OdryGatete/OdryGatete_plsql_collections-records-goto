@@ -17,4 +17,4 @@ Correction results
 ![Task 2](PL_SQL_SCRIPTS/images/collection_img.png)
 
 Record results
-![Task 2](PL_SQL_SCRIPTS/images/collection_img.png)
+![Task 2](PL_SQL_SCRIPTS/images/RECORD_results.png)
