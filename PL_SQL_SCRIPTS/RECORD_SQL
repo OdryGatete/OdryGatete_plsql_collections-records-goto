@@ -1,1 +1,54 @@
+-- === RECORDS EXAMPLE: table-based, user-defined, cursor-based ===
+DECLARE
+  -- Table-based record: inherits structure from employees table
+  emp_rec employees%ROWTYPE;
+
+  -- User-defined record type
+  TYPE EmployeeRec IS RECORD (
+    emp_id  NUMBER,
+    full_name VARCHAR2(200),
+    salary NUMBER
+  );
+  emp_custom EmployeeRec;
+
+  -- Cursor-based record: declare cursor and record
+  CURSOR c_it_emp IS
+    SELECT employee_id, first_name, last_name, salary
+    FROM employees
+    WHERE department_id = 3
+    ORDER BY employee_id;
+  c_emp_rec c_it_emp%ROWTYPE;
+BEGIN
+  -- 1) Table-based record: fetch employee with employee_id = 1
+  BEGIN
+    SELECT * INTO emp_rec FROM employees WHERE employee_id = 1;
+    DBMS_OUTPUT.PUT_LINE('Table-based record: ' || emp_rec.first_name || ' ' || emp_rec.last_name || ' -- ' || emp_rec.email);
+  EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+      DBMS_OUTPUT.PUT_LINE('Table-based record: employee_id = 1 not found.');
+  END;
+
+  -- 2) User-defined record: assign values and display
+  emp_custom.emp_id := emp_rec.employee_id;
+  emp_custom.full_name := emp_rec.first_name || ' ' || emp_rec.last_name;
+  emp_custom.salary := emp_rec.salary;
+  DBMS_OUTPUT.PUT_LINE('User-defined record: ID=' || emp_custom.emp_id || ', Name=' || emp_custom.full_name || ', Salary=' || emp_custom.salary);
+
+  -- 3) Cursor-based record: loop through IT employees
+  OPEN c_it_emp;
+  LOOP
+    FETCH c_it_emp INTO c_emp_rec;
+    EXIT WHEN c_it_emp%NOTFOUND;
+    DBMS_OUTPUT.PUT_LINE('Cursor-based record: ID=' || c_emp_rec.employee_id || ' Name=' || c_emp_rec.first_name || ' ' || c_emp_rec.last_name || ' Salary=' || c_emp_rec.salary);
+  END LOOP;
+  CLOSE c_it_emp;
+
+EXCEPTION
+  WHEN OTHERS THEN
+    IF c_it_emp%ISOPEN THEN
+      CLOSE c_it_emp;
+    END IF;
+    DBMS_OUTPUT.PUT_LINE('Error in Records block: ' || SQLERRM);
+END;
+/
 
