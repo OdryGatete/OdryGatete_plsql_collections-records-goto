@@ -12,3 +12,6 @@ Next, we can represent each employee as a record, which neatly organizes all the
 Finally, we can use a GOTO statement to skip over employees who don’t qualify for a bonus, keeping the logic straightforward and easy to follow.
 
 This approach not only makes bonus calculation more efficient but also gives a clear example of how Collections, Records, and GOTO statements work together in PL/SQL.
+
+Correction results 
+![Task 2](/image/Task%202%20.png)
