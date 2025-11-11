@@ -1,4 +1,4 @@
--- === COLLECTIONS EXAMPLE: associative array, nested table, and VARRAY ===
+
 DECLARE
   -- 1) associative array indexed by binary_integer to hold salaries
   TYPE emp_salary_tab IS TABLE OF employees.salary%TYPE INDEX BY BINARY_INTEGER;
