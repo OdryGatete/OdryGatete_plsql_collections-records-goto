@@ -1,4 +1,4 @@
--- === RECORDS EXAMPLE: table-based, user-defined, cursor-based ===
+
 DECLARE
   -- Table-based record: inherits structure from employees table
   emp_rec employees%ROWTYPE;
