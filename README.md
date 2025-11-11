@@ -15,3 +15,6 @@ This approach not only makes bonus calculation more efficient but also gives a c
 
 Correction results 
 ![Task 2](PL_SQL_SCRIPTS/images/collection_img.png)
+
+Record results
+![Task 2](PL_SQL_SCRIPTS/images/collection_img.png)
